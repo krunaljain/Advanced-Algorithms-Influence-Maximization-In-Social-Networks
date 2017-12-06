@@ -3,7 +3,10 @@
 # Reads a text file and creates a graph as a list of edges, each edge has a random weight.
 
 from Graph import *
-import random
+import sys, random
+from InfluenceUtility import *
+sys.setrecursionlimit(100000)
+import matplotlib.pyplot as np
 
 def ReadGraphFile (fn) :
     f = open (fn)
@@ -37,6 +40,14 @@ def CreateRandomGraphs (num_graphs, edges, probs) :
 
 edges_list, weight_list = ReadGraphFile ("data/ca-HepTh.txt")
 graph_snaps = CreateRandomGraphs (10, edges_list, weight_list)
-for graph in graph_snaps :
-    print ("new graph")
-    graph.print_graph ()
+# for graph in graph_snaps :
+#     print ("new graph")
+#     graph.print_graph ()
+y = []
+for i in range (1,10) :
+    l = len((find_influence (set([24325]), graph_snaps, i)))
+    print (l)
+    y.append(l)
+
+np.plot (range (1,10), y)
+np.show ()

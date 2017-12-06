@@ -9,7 +9,7 @@ def find_influence (source_nodes, graph_snapshots, threshold) :
             if node in influenced_node_count :
                 influenced_node_count[node]+=1
             else :
-                influenced_node_count[node] = [1]
+                influenced_node_count[node] = 1
 
     influenced_nodes = set([])
     for node in influenced_node_count :

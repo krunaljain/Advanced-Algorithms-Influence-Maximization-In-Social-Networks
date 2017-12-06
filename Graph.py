@@ -15,8 +15,29 @@ class Graph :
 
     def find_reachable_nodes (self, source_nodes) :
         # source nodes is a list of nodes
-        pass
+        reached = set([])
+        for node in source_nodes :
+            self.dfs (node, reached)
+
+        return reached
+
+    def dfs (self, node, reached) :
+        for nbr in self.edges[node] :
+            if nbr not in reached :
+                reached.add (nbr)
+                self.dfs (nbr, reached)
 
     def print_graph (self) :
         for node in self.edges :
             print (node, ": ", self.edges[node])
+
+def test () :
+    G = Graph ()
+    G.add_edge (0,1)
+    G.add_edge (1,2)
+    G.add_edge (2,3)
+    G.add_edge (1,4)
+    print (G.find_reachable_nodes ([1]))
+
+if __name__ == "__main__" :
+    test ()
