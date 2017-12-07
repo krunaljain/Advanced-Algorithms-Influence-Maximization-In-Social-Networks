@@ -14,6 +14,7 @@ def ReadGraphFile (fn) :
 
     edges_list = []
     weight_list = []
+    nodes_set = set([])
     for line in lines :
         if line[0] == "#" :
             continue
@@ -23,8 +24,10 @@ def ReadGraphFile (fn) :
 
         # TODO: assign num parallel edges here and use it to assign a probability for each edge.
         weight_list.append (random.random())
+        nodes_set.add(node1)
+        nodes_set.add(node2)
 
-    return edges_list, weight_list
+    return edges_list, weight_list, nodes_set
 
 def CreateRandomGraphs (num_graphs, edges, probs) :
     graph_snapshots = []
@@ -38,16 +41,21 @@ def CreateRandomGraphs (num_graphs, edges, probs) :
 
     return graph_snapshots
 
-edges_list, weight_list = ReadGraphFile ("data/ca-HepTh.txt")
+edges_list, weight_list, nodes_set = ReadGraphFile ("data/ca-HepTh.txt")
 graph_snaps = CreateRandomGraphs (10, edges_list, weight_list)
 # for graph in graph_snaps :
 #     print ("new graph")
 #     graph.print_graph ()
-y = []
-for i in range (1,10) :
-    l = len((find_influence (set([24325]), graph_snaps, i)))
-    print (l)
-    y.append(l)
+# y = []
+# for i in range (1,10) :
+#     l = len((find_influence (set([24325]), graph_snaps, i)))
+#     print (l)
+#     y.append(l)
 
-np.plot (range (1,10), y)
-np.show ()
+# np.plot (range (1,10), y)
+# np.show ()
+
+i = 0
+for node in nodes_set :
+    print (i, node, len(find_influence (set([node]), graph_snaps, 5)))
+    i+=1
