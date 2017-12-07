@@ -17,7 +17,8 @@ class Graph :
         # source nodes is a list of nodes
         reached = set([])
         for node in source_nodes :
-            self.dfs (node, reached)
+            if node in self.edges :
+                self.dfs (node, reached)
 
         return reached
 
