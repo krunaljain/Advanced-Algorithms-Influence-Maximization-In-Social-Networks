@@ -8,10 +8,7 @@ def heuristic1 (graph_snaps, nodes_set, k, step_size) :
     # k: number of nodes to influence initially
     # step_size: number of nodes to add to the opt set every iteration
 
-
-    maxLength = 0;
-    bestNode = 0;
-    bestNodes = {};
+    bestNodes = set();
 
     influenceMap = getInfluenceMap(nodes_set,graph_snaps,30);
     uninfluencedNodes = nodes_set;
@@ -26,7 +23,8 @@ def heuristic1 (graph_snaps, nodes_set, k, step_size) :
                 maxLength = new_nodes_influenced;
                 maxNode = uninfluenced_node;
 
-        bestNodes[maxNode] = maxLength;
+        bestNodes = set.union(influenceMap[maxNode],bestNodes);
+        bestNodes.add(maxNode);
         uninfluencedNodes.discard(maxNode);
         uninfluencedNodes.discard(influenceMap[maxNode]);
 

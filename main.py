@@ -30,7 +30,8 @@ def main () :
     #     print (i, len(find_influence (set([nodes_list[i]]), graph_snaps, 30)))
     k = 3;
     step_size = 1;
-
-    heuristic1 (graph_snaps, nodes_set, k, step_size)
+    influenceSet = heuristic1(graph_snaps, nodes_set, k, step_size);
+    print(influenceSet);
+    print("Size of influenced set is " + len(influenceSet));
 
 main ()
