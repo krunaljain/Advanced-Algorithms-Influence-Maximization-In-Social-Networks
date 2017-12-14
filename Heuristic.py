@@ -1,8 +1,10 @@
 #!/usr/local/bin/python3.6
 import  InfluenceUtility as influence
+import pickle
+import random
 
-def heuristic1 (graph_snaps, nodes_set, k, step_size) :
-    pass
+def heuristic1 (graph_snaps, nodes_set, k, step_size, threshold) :
+    load_influence_map_from_file = 0
     # graph_snaps: graph snapshots
     # nodes_set: set of nodes in the complete graph
     # k: number of nodes to influence initially
@@ -10,7 +12,15 @@ def heuristic1 (graph_snaps, nodes_set, k, step_size) :
 
     bestNodes = set();
 
-    influenceMap = getInfluenceMap(nodes_set,graph_snaps,30);
+    if not load_influence_map_from_file :
+        influenceMap = getInfluenceMap(nodes_set,graph_snaps,threshold);
+        f = open ("influenceMapObject.pickle", "wb")
+        pickle.dump (influenceMap, f)
+        f.close ()
+    else :
+        f = open ("influenceMapObject.pickle", "rb")
+        influenceMap = pickle.load (f)
+
     uninfluencedNodes = nodes_set;
     for i in range(k):
         maxLength = 0;
@@ -55,3 +65,11 @@ def getInfluenceMap(nodes_set,graph_snapshots, threshold) :
     #   find best_node - the node which produces maximum num_new_influences
     #   add best_node to best_set
     # return best_set
+
+def random_heuristic (graph_snaps, nodes_set, k, step_size) :
+    # Pick k nodes at random from nodes_set and add it to best nodes
+    best_nodes = set ([])
+    for _ in range (k) :
+        best_nodes.add(random.sample(nodes_set, 1)[0])
+
+    return best_nodes

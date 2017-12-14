@@ -7,6 +7,8 @@ from Heuristic import *
 from InfluenceUtility import *
 sys.setrecursionlimit(100000)
 
+random.seed(0)
+
 def main () :
     edges_list, weight_list, nodes_set = ReadGraphFile ("data/ca-HepTh.txt")
     graph_snaps = CreateRandomGraphs (50, edges_list, weight_list)
@@ -30,8 +32,14 @@ def main () :
     #     print (i, len(find_influence (set([nodes_list[i]]), graph_snaps, 30)))
     k = 3;
     step_size = 1;
-    influenceSet = heuristic1(graph_snaps, nodes_set, k, step_size);
-    print(influenceSet);
-    print("Size of influenced set is " + len(influenceSet));
+    threshold = 10;
+    influenceSet = heuristic1(graph_snaps, nodes_set, k, step_size, threshold);
+    # print(influenceSet);
+    print("Size of influenced set is ", len(influenceSet));
+
+    for _ in range (10) :
+        influenceSetRandom = random_heuristic (graph_snaps, nodes_set, k, step_size)
+        # print ("random influenced set is ", influenceSetRandom)
+        print ("Size of influenced set by random heuristic is ", len(find_influence (influenceSetRandom, graph_snaps, threshold)))
 
 main ()
