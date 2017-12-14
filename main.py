@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python3.6
 
 import sys, random
 from Graph import *
@@ -30,16 +30,16 @@ def main () :
     # for i in range(len(nodes_list)-10) :
     #     # print (i, len(find_influence (set([nodes_list[i], nodes_list[i+1], nodes_list[i+2], nodes_list[i+3], nodes_list[i+4]]), graph_snaps, 45)))
     #     print (i, len(find_influence (set([nodes_list[i]]), graph_snaps, 30)))
-    k = 3;
+
     step_size = 1;
     threshold = 10;
-    influenceSet = heuristic1(graph_snaps, nodes_set, k, step_size, threshold);
-    # print(influenceSet);
-    print("Size of influenced set is ", len(influenceSet));
+    for k in range (2, 20) :
+        print ("k = ", k)
+        influenceSet = heuristic1(graph_snaps, nodes_set, k, step_size, threshold);
+        # print(influenceSet);
+        print("Size of influenced set is ", len(influenceSet));
 
-    for _ in range (10) :
-        influenceSetRandom = random_heuristic (graph_snaps, nodes_set, k, step_size)
         # print ("random influenced set is ", influenceSetRandom)
-        print ("Size of influenced set by random heuristic is ", len(find_influence (influenceSetRandom, graph_snaps, threshold)))
+        print ("Size of influenced set by random heuristic is ", random_heuristic (graph_snaps, nodes_set, k, step_size, threshold))
 
 main ()
