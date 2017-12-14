@@ -11,29 +11,37 @@ def heuristic1 (graph_snaps, nodes_set, k, step_size) :
 
     maxLength = 0;
     bestNode = 0;
-    bestNodeSet = set();
+    bestNodes = {};
+
+    influenceMap = getInfluenceMap(nodes_set,graph_snaps,30);
     uninfluencedNodes = nodes_set;
     for i in range(k):
-        influencedMap = {};
         maxLength = 0;
         maxNode = 0;
 
         for uninfluenced_node in uninfluencedNodes:
-            current_node = set();
-            current_node.add(uninfluenced_node);
-            threshold = 30;
-            influencedMap[uninfluenced_node] = set.intersection(uninfluencedNodes, influence.find_influence(current_node,graph_snaps,threshold));
-            new_nodes_influenced = len(influencedMap[uninfluenced_node]);
+
+            new_nodes_influenced = len(set.intersection(influenceMap[uninfluenced_node], uninfluencedNodes));
             if maxLength < new_nodes_influenced:
                 maxLength = new_nodes_influenced;
                 maxNode = uninfluenced_node;
 
-        bestNodeSet.add(maxNode);
+        bestNodes[maxNode] = maxLength;
         uninfluencedNodes.discard(maxNode);
-        uninfluencedNodes.discard(influencedMap[maxNode]);
+        uninfluencedNodes.discard(influenceMap[maxNode]);
 
-    print(bestNodeSet)
-    return  bestNodeSet;
+    return  bestNodes;
+
+def getInfluenceMap(nodes_set,graph_snapshots, threshold) :
+    influencedMap = {};
+    for node in nodes_set:
+        node_set = set();
+        node_set.add(node);
+        influencedMap[node] = influence.find_influence(node_set,graph_snapshots,threshold);
+    return influencedMap;
+
+
+
 
 
     # find the influence of each vertex
