@@ -37,12 +37,14 @@ def main () :
 
     # print (len(influence.find_influence(set([65687]), graph_snaps, threshold)))
     # print (len(influence.find_influence(set([44262]), graph_snaps, threshold)))
-
+    influenceMap = getInfluenceMap(nodes_set,graph_snaps,threshold);
     for k in range (20,21) :
         print ("k = ", k)
-        influenceSet = heuristic1(graph_snaps, nodes_set, k, step_size, threshold);
+        influenceSet = heuristic1(graph_snaps, nodes_set, k, step_size, threshold,influenceMap);
         # print(influenceSet);
         print("Size of influenced set is ", len(influenceSet));
+
+        print("Size of influenced set by greedy heuristic is ", heuristic2(graph_snaps,nodes_set,k,step_size,threshold,influenceMap))
 
         # print ("random influenced set is ", influenceSetRandom)
         print ("Size of influenced set by random heuristic is ", random_heuristic (graph_snaps, nodes_set, k, step_size, threshold))
