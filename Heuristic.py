@@ -4,7 +4,7 @@ import pickle
 import random
 
 def heuristic1 (graph_snaps, nodes_set, k, step_size, threshold) :
-    load_influence_map_from_file = 1
+    load_influence_map_from_file = 0
     # graph_snaps: graph snapshots
     # nodes_set: set of nodes in the complete graph
     # k: number of nodes to influence initially
@@ -33,10 +33,15 @@ def heuristic1 (graph_snaps, nodes_set, k, step_size, threshold) :
                 maxLength = new_nodes_influenced;
                 maxNode = uninfluenced_node;
 
+        # print ("best nodes before", len(bestNodes))
         bestNodes = set.union(influenceMap[maxNode],bestNodes);
+        print ("best nodes after", len(bestNodes))
+        print ("maxLength intersection", maxLength)
+        print ("maxLength before intersection", len(influenceMap[maxNode]))
         bestNodes.add(maxNode);
-        uninfluencedNodes.discard(maxNode);
-        uninfluencedNodes.discard(influenceMap[maxNode]);
+        uninfluencedNodes.remove(maxNode);
+        uninfluencedNodes = uninfluencedNodes.difference(influenceMap[maxNode]);
+        # print ("uninfluenced nodes", len(uninfluencedNodes))
 
     return  bestNodes;
 
