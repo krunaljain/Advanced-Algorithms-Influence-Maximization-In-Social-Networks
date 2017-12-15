@@ -44,7 +44,7 @@ def main () :
         # print(influenceSet);
         print("Size of influenced set is ", len(influenceSet));
 
-        print("Size of influenced set by greedy heuristic is ", heuristic2(graph_snaps,nodes_set,k,step_size,threshold,influenceMap))
+        print("Size of influenced set by greedy heuristic is ", len(heuristic2(graph_snaps,nodes_set,k,step_size,threshold,influenceMap)))
 
         # print ("random influenced set is ", influenceSetRandom)
         print ("Size of influenced set by random heuristic is ", random_heuristic (graph_snaps, nodes_set, k, step_size, threshold))
