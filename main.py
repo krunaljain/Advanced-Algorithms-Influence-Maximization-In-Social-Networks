@@ -7,6 +7,8 @@ from Heuristic import *
 from InfluenceUtility import *
 sys.setrecursionlimit(100000)
 import matplotlib.pyplot as pyplot;
+import time;
+
 
 
 # random.seed(0)
@@ -35,7 +37,7 @@ def main () :
 
     step_size = 1;
     threshold = 10;
-    totalNodes = range(0, 21);
+    totalNodes = range(0, 101);
 
     optimizedGreedyHeuristic = [];
     greedyHeuristic = [];
@@ -49,6 +51,13 @@ def main () :
     influenceMap = getInfluenceMap(nodes_set,graph_snaps,threshold);
     optimizedGreedyHeuristicSelectedSet = set();
     greedyHeuristicSelectedSet = set();
+    randomHeuristicTime = [];
+    randomHeuristicTime.append(0);
+    optimizedGreedyHeuristicTime = [];
+
+    optimizedGreedyHeuristicTime.append(0);
+    greedyHeuristicTime = [];
+    greedyHeuristicTime.append(0);
 
     for k in totalNodes :
         print ("k = ", k)
@@ -56,17 +65,23 @@ def main () :
         if k == 0:
             continue;
 
+        startTime = time.time();
         randomHeuristicCount = random_heuristic(graph_snaps, nodes_set, k, step_size, threshold);
+        randomHeuristicTime.append(time.time() - startTime);
         randomHeuristic.append(randomHeuristicCount);
 
+        startTime = time.time();
         influenceSet = heuristic1(graph_snaps, nodes_set, k, step_size, threshold,influenceMap,optimizedGreedyHeuristicSelectedSet);
+        optimizedGreedyHeuristicTime.append(time.time() - startTime);
         # print(influenceSet);
         print("Size of influenced set is ", len(influenceSet));
 
 
         # print ("random influenced set is ", influenceSetRandom)
         optimizedGreedyHeuristicCount = len(influenceSet);
+        startTime = time.time();
         greedyHeuristicCount = len(heuristic2(graph_snaps,nodes_set,k,step_size,threshold,influenceMap,greedyHeuristicSelectedSet));
+        greedyHeuristicTime.append(time.time() - startTime);
         print("Size of influenced set by greedy heuristic is ", greedyHeuristicCount);
 
 
@@ -86,7 +101,16 @@ def main () :
     pyplot.ylabel('Total nodes influnced');
     pyplot.xlabel('Total nodes selected');
     pyplot.show()
-    pyplot.savefig('greedy_heuristics');
+
+    pyplot.plot(totalNodes, optimizedGreedyHeuristicTime, '-b', label='Optimized Greedy Heuristic')
+    pyplot.plot(totalNodes, greedyHeuristicTime, '-r', label='Greedy Heuristic')
+    pyplot.plot(totalNodes, randomHeuristicTime, '-g', label='Random Heuristic')
+
+    pyplot.legend(loc='upper left')
+    pyplot.ylabel('Total execution time');
+    pyplot.xlabel('Total nodes selected');
+    pyplot.show()
+    pyplot.savefig('greedy_heuristics_time');
 
 
 main ()
