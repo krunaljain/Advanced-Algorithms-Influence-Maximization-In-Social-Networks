@@ -14,7 +14,7 @@ import time;
 # random.seed(0)
 
 def main () :
-    edges_list, weight_list, nodes_set = ReadGraphFile ("data/ca-HepTh.txt")
+    edges_list, weight_list, nodes_set = ReadGraphFile (sys.argv[1])
     graph_snaps = CreateRandomGraphs (50, edges_list, weight_list)
 
     # for graph in graph_snaps :
