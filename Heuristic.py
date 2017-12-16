@@ -3,14 +3,25 @@ import  InfluenceUtility as influence
 import pickle
 import random
 
-def heuristic1 (graph_snaps, nodes_set, k, step_size, threshold,influenceMap) :
+def heuristic1 (graph_snaps, nodes_set, k, step_size, threshold,influenceMap,selectedSet) :
     load_influence_map_from_file = 0
     # graph_snaps: graph snapshots
     # nodes_set: set of nodes in the complete graph
     # k: number of nodes to influence initially
     # step_size: number of nodes to add to the opt set every iteration
+    uninfluencedNodes = nodes_set;
+
 
     bestNodes = set();
+    maxLength = 0;
+    maxNode = -1;
+    for node in selectedSet:
+        bestNodes = set.union(influenceMap[node],bestNodes);
+        bestNodes.add(node);
+        uninfluencedNodes.discard(node);
+
+        uninfluencedNodes = uninfluencedNodes.difference(bestNodes);
+
 
     if not load_influence_map_from_file :
         f = open ("influenceMapObject.pickle", "wb")
@@ -20,70 +31,66 @@ def heuristic1 (graph_snaps, nodes_set, k, step_size, threshold,influenceMap) :
         f = open ("influenceMapObject.pickle", "rb")
         influenceMap = pickle.load (f)
 
-    uninfluencedNodes = nodes_set;
-    for i in range(k):
-        maxLength = 0;
-        maxNode = 0;
 
-        for uninfluenced_node in uninfluencedNodes:
+    for uninfluenced_node in uninfluencedNodes:
 
-            new_nodes_influenced = len(set.intersection(influenceMap[uninfluenced_node], uninfluencedNodes));
-            if maxLength < new_nodes_influenced:
-                maxLength = new_nodes_influenced;
-                maxNode = uninfluenced_node;
+        new_nodes_influenced = len(set.intersection(influenceMap[uninfluenced_node], uninfluencedNodes));
+        if maxLength < new_nodes_influenced:
+            maxLength = new_nodes_influenced;
+            maxNode = uninfluenced_node;
 
         # print ("best nodes before", len(bestNodes))
-        bestNodes = set.union(influenceMap[maxNode],bestNodes);
-        print ("best nodes after", len(bestNodes))
-        print ("maxLength intersection", maxLength)
-        print ("maxLength before intersection", len(influenceMap[maxNode]))
-        bestNodes.add(maxNode);
-        uninfluencedNodes.remove(maxNode);
-        uninfluencedNodes = uninfluencedNodes.difference(influenceMap[maxNode]);
-        # print ("uninfluenced nodes", len(uninfluencedNodes))
+
+    bestNodes.add(maxNode);
+    bestNodes = set.union(bestNodes,influenceMap[maxNode]);
+    selectedSet.add(maxNode);
+
+    # print ("uninfluenced nodes", len(uninfluencedNodes))
 
     return  bestNodes;
 
 
-def heuristic2 (graph_snaps, nodes_set, k, step_size, threshold,influenceMap) :
+def heuristic2 (graph_snaps, nodes_set, k, step_size, threshold,influenceMap,selectedSet) :
     load_influence_map_from_file = 0
     # graph_snaps: graph snapshots
     # nodes_set: set of nodes in the complete graph
     # k: number of nodes to influence initially
     # step_size: number of nodes to add to the opt set every iteration
+    uninfluencedNodes = nodes_set;
 
     bestNodes = set();
+    maxLength = 0;
+    maxNode = -1;
+    for node in selectedSet:
+        bestNodes = set.union(influenceMap[node], bestNodes);
+        bestNodes.add(node);
+        uninfluencedNodes.discard(node);
 
-    if not load_influence_map_from_file :
-        f = open ("influenceMapObject.pickle", "wb")
-        pickle.dump (influenceMap, f)
-        f.close ()
-    else :
-        f = open ("influenceMapObject.pickle", "rb")
-        influenceMap = pickle.load (f)
+    if not load_influence_map_from_file:
+        f = open("influenceMapObject.pickle", "wb")
+        pickle.dump(influenceMap, f)
+        f.close()
+    else:
+        f = open("influenceMapObject.pickle", "rb")
+        influenceMap = pickle.load(f)
 
-    uninfluencedNodes = nodes_set;
-    for i in range(k):
-        maxLength = 0;
-        maxNode = 0;
+    for uninfluenced_node in uninfluencedNodes:
 
-        for uninfluenced_node in uninfluencedNodes:
+        new_nodes_influenced = len(set.intersection(influenceMap[uninfluenced_node], uninfluencedNodes));
+        if maxLength < new_nodes_influenced:
+            maxLength = new_nodes_influenced;
+            maxNode = uninfluenced_node;
 
-            new_nodes_influenced = len(influenceMap[uninfluenced_node]);
-            if maxLength < new_nodes_influenced:
-                maxLength = new_nodes_influenced;
-                maxNode = uninfluenced_node;
+            # print ("best nodes before", len(bestNodes))
 
-        # print ("best nodes before", len(bestNodes))
-        bestNodes = set.union(influenceMap[maxNode],bestNodes);
-        print ("best nodes after", len(bestNodes))
-        print ("maxLength intersection", maxLength)
-        print ("maxLength before intersection", len(influenceMap[maxNode]))
-        bestNodes.add(maxNode);
-        uninfluencedNodes.remove(maxNode);
-        # print ("uninfluenced nodes", len(uninfluencedNodes))
+    bestNodes.add(maxNode);
+    bestNodes = set.union(bestNodes,influenceMap[maxNode]);
+    selectedSet.add(maxNode);
+    selectedSet = set.union(selectedSet,influenceMap[maxNode]);
 
-    return  bestNodes;
+    # print ("uninfluenced nodes", len(uninfluencedNodes))
+
+    return bestNodes;
 
 def getInfluenceMap(nodes_set,graph_snapshots, threshold) :
     influencedMap = {};
